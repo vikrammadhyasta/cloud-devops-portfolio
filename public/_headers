@@ -1,0 +1,46 @@
+# ============================================================
+# Netlify Security Headers
+# ============================================================
+# Applied to all responses served from the publish directory.
+# The /assets/* path also inherits cache-control from below.
+# ============================================================
+
+/*
+  # HTTP Strict Transport Security
+  # Enforces HTTPS for 1 year. No includeSubDomains — we do not
+  # assert control over all subdomains. No preload — DNS-level
+  # preloading is irreversible and requires meeting all prereqs.
+  Strict-Transport-Security: max-age=31536000
+
+  # Prevent browsers from MIME-sniffing a response away from
+  # the declared content-type. Defense-in-depth.
+  X-Content-Type-Options: nosniff
+
+  # Prevent the site from being embedded in any frame (clickjacking).
+  # DENY is appropriate — this portfolio has no legitimate framing use.
+  X-Frame-Options: DENY
+
+  # Control what Referrer header is sent when navigating away.
+  # strict-origin-when-cross-origin: full URL on same origin, origin
+  # only on cross-origin HTTPS→HTTPS, and nothing on HTTPS→HTTP.
+  Referrer-Policy: strict-origin-when-cross-origin
+
+  # Disable browser features (geolocation, camera, microphone, etc.)
+  # that the portfolio never uses. Empty attribute-value syntax is
+  # the standard way to disable a feature.
+  Permissions-Policy: accelerometer=(), camera=(), geolocation=(), microphone=(), payment=()
+
+  # Cross-Origin-Opener-Policy: same-origin
+  # Prevents cross-origin documents from accessing this window's
+  # browsing context group. Mitigates Spectre-class side-channel
+  # attacks. No cross-origin windows/iframes are used, so there is
+  # no compatibility impact.
+  Cross-Origin-Opener-Policy: same-origin
+
+  # Cross-Origin-Resource-Policy: same-origin
+  # Ensures resources are only loaded from this origin. Prevents
+  # cross-origin loading of fonts, scripts, and assets served here.
+  # (Google Fonts are loaded from fonts.gstatic.com — they are
+  # unaffected by this header on our origin.)
+  Cross-Origin-Resource-Policy: same-origin
+
